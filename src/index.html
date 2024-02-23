@@ -4,18 +4,15 @@
     <meta charset="UTF-8" />
     <title>Hello World!</title>
     <link rel="stylesheet" href="index.css" />
+    <script src="timer.js"></script>
   </head>
   <body>
-    <div id="timer-label-container">
-      <h1 id="timer-label">focus</h1>
-    </div>
-    <div id="timer-inputs-container">
-      <input type="number" id="timer-input-hours" step="" value="0" min="0" max="1" />
-      <input type="number" id="timer-input-minutes" step="" value="25" min="0" max="59" />
-      <input type="number" id="timer-input-seconds" step="" value="0" min="0" max="59" />
-    </div>
-    <div id="timer-control-container">
-      <button id="timer-start-stop-button" type="button">Start</button>
+    <div id="timer-container">
+      <h1 id="timer-label">Focus</h1>
+      <p id="timer-display">
+        <span id="timer-display-minutes">--</span><span class="timer-display-separator">:</span><span id="timer-display-seconds">--</span>
+      </p>
+      <button id="timer-start-stop-button" type="button">Start/Pause</button>
     </div>
   </body>
 </html>
