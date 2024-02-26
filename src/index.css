@@ -35,9 +35,14 @@ body {
 
 #timer-display {
   font-family: var(--font-mono);
-  font-size: 4rem;
+  /*font-size: 4rem;*/
 }
 
-#timer-container {
+#timer-container,
+#settings-toggle {
   -webkit-app-region: no-drag;
+}
+
+.hidden {
+  opacity: 0;
 }

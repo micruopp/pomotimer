@@ -38,6 +38,7 @@ function Timer(duration, updateCallback) {
 
   this.pause = () => {
     isRunning = false;
+    this.tock = false;
     if (intervalId) {
         clearInterval(intervalId);
     }
@@ -51,7 +52,7 @@ function Timer(duration, updateCallback) {
 
   this.reset = () => {
     this.pause();
-    this.remaining = this.duration;
+    this.remaining = this.duration * 60 * 1000;
   };
 
 }
@@ -63,12 +64,16 @@ function Timer(duration, updateCallback) {
     let timerDisplay = document.getElementById('timer-display');
     let timerMinutes = document.getElementById('timer-display-minutes');
     let timerSeconds = document.getElementById('timer-display-seconds');
+    let timerSeparators = document.getElementsByClassName('timer-display-separator');
 
     let timer = new Timer(25, () => {
       let minutes = timer.toMinutes();
       let seconds = timer.toSeconds();
       timerMinutes.innerHTML = `${minutes}`;
       timerSeconds.innerHTML = `${seconds < 10 ? '0' + seconds : seconds}`;
+      for (const s of timerSeparators) {
+        seconds % 2 === 0 ? s.classList.add('hidden') : s.classList.remove('hidden');
+      }
     });
 
     let timerStateButton = document.getElementById('timer-start-stop-button');
