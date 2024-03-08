@@ -26,11 +26,26 @@ const createWindow = () => {
     win.loadFile(path.join(__dirname, 'settings.html'));
   });
 
+  ipcMain.on('close-settings', (e, value) => {
+    const webContents = e.sender;
+    const win = BrowserWindow.fromWebContents(webContents);
+    win.loadFile(path.join(__dirname, 'timer.html'));
+  });
+
+  ipcMain.on('show-window', showWindow);
+  ipcMain.on('hide-window', hideWindow);
+
+
+  //TODO
+  //ipcMain.on('toggle-settings', (e, val) => {
+  //  can I check the name of e.sender and get 'timer' or 'settings')?
+  //});
+
   // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, 'index.html'));
+  mainWindow.loadFile(path.join(__dirname, 'timer.html'));
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  //mainWindow.webContents.openDevTools();
 };
 
 // This method will be called when Electron has finished
@@ -57,3 +72,18 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+
+const isMacos = () => { return process.platform === 'darwin' };
+
+const showWindow = (e) => {
+  const webContents = e.sender;
+  const win = BrowserWindow.fromWebContents(webContents);
+  isMacos ? app.show() : win.show();
+};
+
+const hideWindow = (e) => {
+  const webContents = e.sender;
+  const win = BrowserWindow.fromWebContents(webContents);
+  isMacos ? app.hide() : win.hide();
+};
+

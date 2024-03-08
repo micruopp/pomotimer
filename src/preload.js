@@ -3,6 +3,8 @@
 
 const { contextBridge, ipcRenderer } = require('electron/renderer');
 
-contextBridge.exposeInMainWorld('bridge', {
+contextBridge.exposeInMainWorld('electron', {
   openSettings: (val) => ipcRenderer.send('open-settings', val),
+  showWindow: () => ipcRenderer.send('show-window'),
+  hideWindow: () => ipcRenderer.send('hide-window'),
 });

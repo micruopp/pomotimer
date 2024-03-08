@@ -25,6 +25,7 @@ body {
   margin: 0;
 }
 
+/* Timer */
 #timer-label {
   font-family: var(--font-sans);
   font-style: italic;
@@ -35,7 +36,7 @@ body {
 
 #timer-display {
   font-family: var(--font-mono);
-  /*font-size: 4rem;*/
+  font-size: 20vw;
 }
 
 #timer-container,

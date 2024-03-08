@@ -1,4 +1,4 @@
-function Timer(duration, updateCallback) {
+function Timer(duration, onTick, onCompletion) {
   // https://stackoverflow.com/questions/29971898/how-to-create-an-accurate-timer-in-javascript
 
   this.duration = duration;
@@ -16,39 +16,45 @@ function Timer(duration, updateCallback) {
     return Math.floor((this.remaining % (60 * 1000)) / 1000);
   };
 
-  let isRunning = false;
+  this.isRunning = false;
+
   let lastTick = 0;
   let intervalId = null;
 
-  this.start = () => {
-    isRunning = true;
-    lastTick = Date.now();
+  let tick = () => {
+    let dt = Date.now() - lastTick;
+    let remaining = this.remaining - dt;
 
-    intervalId = setInterval(() => {
-      let dt = Date.now() - lastTick;
-      let remaining = this.remaining - dt;
-      this.remaining = remaining < 0 ? 0 : remaining;
-      if (this.remaining === 0) {
-        this.pause();
-      }
-      this.update();
+    this.remaining = remaining < 0 ? 0 : remaining;
+
+    if (this.remaining === 0) {
+      this.pause();
+      this.onCompletion();
+    } else {
+      this.onTick();
       lastTick = Date.now();
-    });
+    }
+  };
+
+  this.start = () => {
+    this.isRunning = true;
+    lastTick = Date.now();
+    intervalId = setInterval(tick);
   };
 
   this.pause = () => {
-    isRunning = false;
-    this.tock = false;
+    this.isRunning = false;
     if (intervalId) {
         clearInterval(intervalId);
     }
   };
 
   this.toggle = () => {
-    isRunning ? this.pause() : this.start();
+    this.isRunning ? this.pause() : this.start();
   };
 
-  this.update = updateCallback;
+  this.onTick = onTick;
+  this.onCompletion = onCompletion;
 
   this.reset = () => {
     this.pause();
@@ -56,27 +62,3 @@ function Timer(duration, updateCallback) {
   };
 
 }
-
-(() => {
-  window.addEventListener('DOMContentLoaded', () => {
-    console.log('hi!! from Timer.js');
-
-    let timerDisplay = document.getElementById('timer-display');
-    let timerMinutes = document.getElementById('timer-display-minutes');
-    let timerSeconds = document.getElementById('timer-display-seconds');
-    let timerSeparators = document.getElementsByClassName('timer-display-separator');
-
-    let timer = new Timer(25, () => {
-      let minutes = timer.toMinutes();
-      let seconds = timer.toSeconds();
-      timerMinutes.innerHTML = `${minutes}`;
-      timerSeconds.innerHTML = `${seconds < 10 ? '0' + seconds : seconds}`;
-      for (const s of timerSeparators) {
-        seconds % 2 === 0 ? s.classList.add('hidden') : s.classList.remove('hidden');
-      }
-    });
-
-    let timerStateButton = document.getElementById('timer-start-stop-button');
-    timerStateButton.addEventListener('click', timer.toggle);
-  });
-})();
